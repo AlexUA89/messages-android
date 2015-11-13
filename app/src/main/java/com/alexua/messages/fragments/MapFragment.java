@@ -1,5 +1,6 @@
 package com.alexua.messages.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -12,13 +13,17 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 /**
  * Created by olkh on 11/13/2015.
  */
-public class MapFragment extends BaseFragment  implements OnMapReadyCallback {
+public class MapFragment extends BaseFragment  implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener {
+
+    private Circle circle;
 
     public static final String TAG = "FRAGMENT_MAP";
     private GoogleMap mMap;
@@ -49,5 +54,40 @@ public class MapFragment extends BaseFragment  implements OnMapReadyCallback {
         LatLng sydney = new LatLng(50.449362, 30.479365);
         mMap.addMarker(new MarkerOptions().position(sydney).title("Тут мы живем с солнышком ))"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        circle = mMap.addCircle(new CircleOptions()
+                .center(new LatLng(50.449362, 30.479365))
+                .radius(10000)
+                .strokeColor(Color.RED));
+
+        mMap.setMyLocationEnabled(true);
+
+        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        // myMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+        // myMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+        // myMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+
+        mMap.setOnMapClickListener(this);
+        mMap.setOnMapLongClickListener(this);
+
+
     }
+
+    @Override
+    public void onMapClick(LatLng point) {
+
+//        mMap.animateCamera(CameraUpdateFactory.newLatLng(point));
+
+    }
+
+    @Override
+    public void onMapLongClick(LatLng point) {
+
+        if(circle != null) {
+            circle.remove();
+        }
+
+        circle = mMap.addCircle(new CircleOptions().center(point).radius(10000).strokeColor(Color.RED));
+
+    }
+
 }
