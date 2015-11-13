@@ -2,28 +2,20 @@ package com.alexua.messages;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.alexua.messages.fragments.MapFragment;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
-
-    private GoogleMap mMap;
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.main_activity);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -31,14 +23,24 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentByTag(MapFragment.TAG);
+                if(mapFragment == null) {
+                    mapFragment = new MapFragment();
+                    getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mapFragment, MapFragment.TAG).commit();
+                }
+
+
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
             }
         });
 
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
+        MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentByTag(MapFragment.TAG);
+        if(mapFragment == null) {
+            mapFragment = new MapFragment();
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mapFragment, MapFragment.TAG).commit();
+        }
+
     }
 
     @Override
@@ -57,6 +59,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentByTag(MapFragment.TAG);
+            if(mapFragment!=null){
+                getSupportFragmentManager().beginTransaction().remove(mapFragment).commit();
+            }
             return true;
         }
 
@@ -64,13 +70,4 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(50.449362, 30.479365);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Тут мы живем с солнышком ))"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
-    }
 }
