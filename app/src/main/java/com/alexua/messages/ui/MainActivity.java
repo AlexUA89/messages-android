@@ -13,9 +13,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.alexua.messages.R;
+import com.alexua.messages.core.AppLog;
+import com.alexua.messages.core.server.ServerAdapter;
+import com.alexua.messages.core.server.api.ServerResponse;
 import com.alexua.messages.ui.fragments.MapFragment;
 import com.alexua.messages.ui.slidingmenu.NavDrawerItem;
 import com.alexua.messages.ui.slidingmenu.NavDrawerListAdapter;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
 
 import java.util.ArrayList;
 
@@ -127,6 +132,18 @@ public class MainActivity extends FragmentActivity {
             mapFragment = new MapFragment();
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mapFragment, MapFragment.TAG).commit();
         }
+
+        ServerAdapter.singinReques("alexua89@gmail.com", "123123", new Response.Listener<ServerResponse>() {
+            @Override
+            public void onResponse(ServerResponse response) {
+                System.out.println(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                AppLog.D("DEVELOP",new String(error.networkResponse.data));
+            }
+        });
 
     }
 

@@ -13,6 +13,7 @@ public final class AppLog {
 
     public static void E(String TAG, Throwable error) {
         System.out.println(TAG + "  :  " + error.getMessage());
+        error.printStackTrace();
         Log.e(TAG, error.getMessage());
     }
 

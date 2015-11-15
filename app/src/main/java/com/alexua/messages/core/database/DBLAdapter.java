@@ -4,6 +4,7 @@ import android.database.Cursor;
 
 import com.alexua.messages.core.AppLog;
 import com.alexua.messages.core.database.datas.DBStorable;
+import com.alexua.messages.core.database.datas.Message;
 import com.alexua.messages.core.database.listener.DBDeleteListener;
 import com.alexua.messages.core.database.listener.DBInsertListener;
 import com.alexua.messages.core.database.listener.DBUpdateListener;
@@ -224,7 +225,7 @@ public class DBLAdapter extends Database {
     private static HashMap<Integer, List<DBDeleteListener>> deleteListeners = new HashMap<Integer, List<DBDeleteListener>>();
     private static HashMap<Integer, List<DBUpdateListener>> updateListeners = new HashMap<Integer, List<DBUpdateListener>>();
     private static int[] typeIDs = new int[]{
-            Constants.PROVIDER_TYPE.ID
+            Message.TypeID
     };
 
     static {
