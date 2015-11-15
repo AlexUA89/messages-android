@@ -1,4 +1,4 @@
-package com.alexua.messages.base;
+package com.alexua.messages.ui.base;
 
 import android.app.Activity;
 import android.support.v4.app.Fragment;

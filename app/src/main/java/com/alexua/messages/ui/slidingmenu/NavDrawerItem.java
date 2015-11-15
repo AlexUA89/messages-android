@@ -1,4 +1,4 @@
-package com.alexua.messages.slidingmenu;
+package com.alexua.messages.ui.slidingmenu;
 
 /**
  * Created by olkh on 11/13/2015.

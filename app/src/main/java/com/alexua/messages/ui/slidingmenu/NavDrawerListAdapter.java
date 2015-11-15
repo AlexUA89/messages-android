@@ -1,4 +1,4 @@
-package com.alexua.messages.slidingmenu;
+package com.alexua.messages.ui.slidingmenu;
 
 import android.app.Activity;
 import android.content.Context;

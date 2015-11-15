@@ -1,4 +1,4 @@
-package com.alexua.messages.fragments;
+package com.alexua.messages.ui.fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.alexua.messages.R;
-import com.alexua.messages.base.BaseFragment;
+import com.alexua.messages.ui.base.BaseFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
