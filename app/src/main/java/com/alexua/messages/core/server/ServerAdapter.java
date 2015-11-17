@@ -13,11 +13,11 @@ public class ServerAdapter {
 
     private static final String serverUrl = "http://31.220.107.60:3000";
 
-    public static void singinReques(String email, String password, Response.Listener<ServerResponse> listener, Response.ErrorListener errorListener) {
+    public static void singinRequest(String email, String password, Response.Listener<ServerResponse> listener, Response.ErrorListener errorListener) {
         HashMap<String, String> params = new HashMap<>();
         params.put("email", email);
         params.put("password", password);
-        new JsonRequest(JsonRequest.POST, serverUrl + "/auth/signin", params, listener,errorListener).execute();
+        new JsonRequest(JsonRequest.POST, serverUrl + "/auth/signin", params, listener, errorListener).execute();
     }
 
 

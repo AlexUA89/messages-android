@@ -133,7 +133,7 @@ public class MainActivity extends FragmentActivity {
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mapFragment, MapFragment.TAG).commit();
         }
 
-        ServerAdapter.singinReques("alexua89@gmail.com", "123123", new Response.Listener<ServerResponse>() {
+        ServerAdapter.singinRequest("alexua89@gmail.com", "123123", new Response.Listener<ServerResponse>() {
             @Override
             public void onResponse(ServerResponse response) {
                 System.out.println(response);
@@ -141,7 +141,7 @@ public class MainActivity extends FragmentActivity {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                AppLog.D("DEVELOP",new String(error.networkResponse.data));
+                AppLog.D("DEVELOP", new String(error.networkResponse.data));
             }
         });
 

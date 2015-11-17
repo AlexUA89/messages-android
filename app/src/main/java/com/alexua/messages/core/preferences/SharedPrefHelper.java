@@ -46,24 +46,24 @@ public class SharedPrefHelper {
         getEditor().putString(SPConstants.NAME, name).commit();
     }
 
-    public static String getUserName() {
-        return getSHP().getString(SPConstants.NAME, "");
+    public static String getUserName(String defaultName) {
+        return getSHP().getString(SPConstants.NAME, defaultName);
     }
 
     public static void setEmail(String email) {
         getEditor().putString(SPConstants.EMAIL, email).commit();
     }
 
-    public static String getEmail() {
-        return getSHP().getString(SPConstants.EMAIL, "");
+    public static String getEmail(String defaultEmail) {
+        return getSHP().getString(SPConstants.EMAIL, defaultEmail);
     }
 
     public static void setToken(String token) {
         getEditor().putString(SPConstants.SESSION_TOKEN, token).commit();
     }
 
-    public static String getToken() {
-        return getSHP().getString(SPConstants.SESSION_TOKEN, "");
+    public static String getToken(String defaultToken) {
+        return getSHP().getString(SPConstants.SESSION_TOKEN, defaultToken);
     }
 
 
