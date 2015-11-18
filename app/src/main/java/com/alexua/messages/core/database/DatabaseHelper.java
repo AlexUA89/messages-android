@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.alexua.messages.core.ContextProvider;
 import com.alexua.messages.core.database.constants.CreateDatabase;
 
 /**
@@ -15,8 +16,15 @@ import com.alexua.messages.core.database.constants.CreateDatabase;
  */
 class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String DATABASE_NAME = "database.db";
-    private static final int DATABASE_VERSION = 1;
+    public static final String DATABASE_NAME = "database.db";
+    public static final int DATABASE_VERSION = 1;
+    public static String getDBPath() {
+        if(android.os.Build.VERSION.SDK_INT >= 17) {
+            return  ContextProvider.getAppContext().getApplicationInfo().dataDir + "/databases/"+DATABASE_NAME;
+        } else {
+            return "/data/data/" + ContextProvider.getAppContext().getPackageName() + "/databases/"+DATABASE_NAME;
+        }
+    }
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

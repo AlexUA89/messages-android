@@ -66,5 +66,12 @@ public class SharedPrefHelper {
         return getSHP().getString(SPConstants.SESSION_TOKEN, defaultToken);
     }
 
+    public static void setUserId(String userId) {
+        getEditor().putString(SPConstants.USER_ID, userId).commit();
+    }
+
+    public static String getUserId(String defaultUserName) {
+        return getSHP().getString(SPConstants.USER_ID, defaultUserName);
+    }
 
 }

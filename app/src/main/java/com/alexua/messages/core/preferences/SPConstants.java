@@ -19,6 +19,8 @@ public class SPConstants {
 
     public static final String EMAIL = "email";
 
+    public static final String USER_ID = "userId";
+
     public static final String SESSION_TOKEN = "token";
 
 }

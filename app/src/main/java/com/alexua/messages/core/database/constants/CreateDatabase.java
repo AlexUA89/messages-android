@@ -17,14 +17,15 @@ public final class CreateDatabase {
 
 
     public static final String CreateSQLScriptMessageProviders = "CREATE TABLE IF NOT EXISTS " + Tables.MESSAGES.TABLE_NAME + " ( "
-            + Tables.MESSAGES.ID + " INTEGER, "
-            + Tables.MESSAGES.MESSAGE + " TEXT, "
+            + Tables.MESSAGES.ID + " INTEGER PRIMARY KEY NOT NULL, "
+            + Tables.MESSAGES.MESSAGE + " TEXT NOT NULL, "
             + Tables.MESSAGES.XCOORD + " REAL, "
             + Tables.MESSAGES.YCOORD + " REAL, "
             + Tables.MESSAGES.TO_USER_ID + " TEXT, "
             + Tables.MESSAGES.CHAT_GROUP_ID + " TEXT, "
-            + Tables.MESSAGES.USER_ID + " TEXT, "
-            + Tables.MESSAGES.USER_NAME + " TEXT, "
-            + Tables.MESSAGES.TIME + " TEXT);";
+            + Tables.MESSAGES.USER_ID + " TEXT NOT NULL, "
+            + Tables.MESSAGES.USER_NAME + " TEXT NOT NULL, "
+            + Tables.MESSAGES.SERVER_ID + " TEXT NOT NULL, "
+            + Tables.MESSAGES.TIME + " TEXT NOT NULL);";
 
 }

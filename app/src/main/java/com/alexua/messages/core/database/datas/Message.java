@@ -5,8 +5,11 @@ import android.database.Cursor;
 import android.os.Parcel;
 import android.text.TextUtils;
 
+import com.alexua.messages.core.AppLog;
 import com.alexua.messages.core.database.constants.DBConstants;
 import com.alexua.messages.core.database.constants.Tables;
+
+import java.util.HashMap;
 
 /**
  * Created by AlexUA on 11/15/2015.
@@ -16,17 +19,23 @@ public class Message extends DBStorable {
     public static final int TypeID = 1;
     private static final String TAG = Message.class.getCanonicalName();
     private long rowId = DBConstants.DEFAULT_ROW_ID;
-    private String message = "";
-    private Double xcoord = Double.NaN;
-    private Double ycoord = Double.NaN;
-    private String toUserId = "";
-    private String chantGroupId = "";
-    private String userId = "";
-    private String userName = "";
-    private String time = "";
+    private String message = null;
+    private Double xcoord = null;
+    private Double ycoord = null;
+    private String toUserId = null;
+    private String chantGroupId = null;
+    private String userId = null;
+    private String userName = null;
+    private String time = null;
+    private String serverId = null;
 
+    public Message(HashMap<String, String> data) {
+        this(data.get("message"), stringToDouble(data.get("xCoord")), stringToDouble(data.get("yCoord")),
+                data.get("toUserId"), data.get("chatGroupId"), data.get("userId"), data.get("userName"), data.get("time"), data.get("_id"));
 
-    public Message(long rowId, String message, Double xcoord, Double ycoord, String toUserId, String chantGroupId, String userId, String user_name, String time) {
+    }
+
+    public Message(long rowId, String message, Double xcoord, Double ycoord, String toUserId, String chantGroupId, String userId, String user_name, String time, String serverId) {
         if (rowId < DBConstants.DEFAULT_ROW_ID) {
             throw new IllegalArgumentException("rowId can not be " + rowId);
         }
@@ -36,24 +45,22 @@ public class Message extends DBStorable {
         }
         this.message = message;
 
-        if (xcoord == null) {
-            throw new IllegalArgumentException("xcoord can not be null");
+        if (TextUtils.isEmpty(toUserId) && TextUtils.isEmpty(chantGroupId) && (xcoord == null || ycoord == null || xcoord.isNaN() || ycoord.isNaN())) {
+            throw new IllegalArgumentException("chat group or toUserId or x/ycoords should be defined");
         }
-        this.xcoord = xcoord;
-        if (ycoord == null) {
-            throw new IllegalArgumentException("ycoord can not be null");
+        if (xcoord == null || xcoord.isNaN()) {
+            this.xcoord = null;
+        } else {
+            this.xcoord = xcoord;
         }
-        this.ycoord = ycoord;
-        if (TextUtils.isEmpty(toUserId) && TextUtils.isEmpty(chantGroupId)) {
-            throw new IllegalArgumentException("chat group or toUserId should be defined");
+        if (ycoord == null || ycoord.isNaN()) {
+            this.ycoord = null;
+        } else {
+            this.ycoord = ycoord;
         }
         this.toUserId = toUserId;
         this.chantGroupId = chantGroupId;
 
-        if (toUserId == null || toUserId.isEmpty()) {
-            throw new IllegalArgumentException("toUserId can not be: " + toUserId + ";");
-        }
-        this.toUserId = toUserId;
         if (TextUtils.isEmpty(userId)) {
             throw new IllegalArgumentException("userId can not be: " + userId + ";");
         }
@@ -66,18 +73,19 @@ public class Message extends DBStorable {
             throw new IllegalArgumentException("time can not be: " + time + ";");
         }
         this.time = time;
+        this.serverId = serverId;
     }
 
-    public Message(String message, Double xcoord, Double ycoord, String toUserId, String chantGroupId, String userId, String user_name, String time) {
-        this(DBConstants.DEFAULT_ROW_ID, message, xcoord, ycoord, toUserId, chantGroupId, userId, user_name, time);
+    public Message(String message, Double xcoord, Double ycoord, String toUserId, String chantGroupId, String userId, String user_name, String time, String serverId) {
+        this(DBConstants.DEFAULT_ROW_ID, message, xcoord, ycoord, toUserId, chantGroupId, userId, user_name, time, serverId);
     }
 
     public Message(Message message) {
-        this(message.getRowID(), message.getMessage(), message.getXcoord(), message.getYcoord(), message.getToUserId(), message.getChantGroupId(), message.getUserId(), message.getUserName(), message.getTime());
+        this(message.getRowID(), message.getMessage(), message.getXcoord(), message.getYcoord(), message.getToUserId(), message.getChantGroupId(), message.getUserId(), message.getUserName(), message.getTime(), message.getServerId());
     }
 
     public Message(Parcel in) {
-        this(in.readLong(), in.readString(), in.readDouble(), in.readDouble(), in.readString(), in.readString(), in.readString(), in.readString(), in.readString());
+        this(in.readLong(), in.readString(), in.readDouble(), in.readDouble(), in.readString(), in.readString(), in.readString(), in.readString(), in.readString(), in.readString());
     }
 
     public Message(Cursor c) {
@@ -89,7 +97,8 @@ public class Message extends DBStorable {
                 c.getString(c.getColumnIndex(Tables.MESSAGES.CHAT_GROUP_ID)),
                 c.getString(c.getColumnIndex(Tables.MESSAGES.USER_ID)),
                 c.getString(c.getColumnIndex(Tables.MESSAGES.USER_NAME)),
-                c.getString(c.getColumnIndex(Tables.MESSAGES.TIME)));
+                c.getString(c.getColumnIndex(Tables.MESSAGES.TIME)),
+                c.getString(c.getColumnIndex(Tables.MESSAGES.SERVER_ID)));
     }
 
     @Override
@@ -105,7 +114,6 @@ public class Message extends DBStorable {
     @Override
     public ContentValues getContentValues() {
         ContentValues values = new ContentValues();
-        values.put(Tables.MESSAGES.ID, rowId);
         values.put(Tables.MESSAGES.MESSAGE, message);
         values.put(Tables.MESSAGES.XCOORD, xcoord);
         values.put(Tables.MESSAGES.YCOORD, ycoord);
@@ -114,6 +122,7 @@ public class Message extends DBStorable {
         values.put(Tables.MESSAGES.USER_ID, userId);
         values.put(Tables.MESSAGES.USER_NAME, userName);
         values.put(Tables.MESSAGES.TIME, time);
+        values.put(Tables.MESSAGES.SERVER_ID, serverId);
         return values;
     }
 
@@ -138,6 +147,7 @@ public class Message extends DBStorable {
         dest.writeString(userId);
         dest.writeString(userName);
         dest.writeString(time);
+        dest.writeString(serverId);
     }
 
     public static final Creator CREATOR = new Creator() {
@@ -178,16 +188,12 @@ public class Message extends DBStorable {
         return userName;
     }
 
+    public String getServerId() {
+        return serverId;
+    }
+
     public String getTime() {
         return time;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
     }
 
     @Override
@@ -196,6 +202,9 @@ public class Message extends DBStorable {
             return false;
         }
         Message o1 = (Message) o;
+        if(serverId!=null && o1.getServerId()!=null && !serverId.equals(o1.getServerId())){
+            return false;
+        }
         if (!o1.getMessage().equalsIgnoreCase(message)) {
             return false;
         }
@@ -218,7 +227,18 @@ public class Message extends DBStorable {
             return false;
         }
         return o1.getTime().equalsIgnoreCase(time);
+    }
 
+    private static Double stringToDouble(String coord) {
+        Double res = null;
+        if (!TextUtils.isEmpty(coord)) {
+            try {
+                res = Double.parseDouble(coord);
+            } catch (NumberFormatException e) {
+                AppLog.E(TAG, e);
+            }
 
+        }
+        return res;
     }
 }

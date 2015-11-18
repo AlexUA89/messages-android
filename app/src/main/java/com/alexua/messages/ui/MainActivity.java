@@ -14,8 +14,11 @@ import android.widget.ListView;
 
 import com.alexua.messages.R;
 import com.alexua.messages.core.AppLog;
+import com.alexua.messages.core.database.DBManager;
+import com.alexua.messages.core.preferences.SharedPrefHelper;
 import com.alexua.messages.core.server.ServerAdapter;
 import com.alexua.messages.core.server.api.ServerResponse;
+import com.alexua.messages.ui.fragments.ChatFragment;
 import com.alexua.messages.ui.fragments.MapFragment;
 import com.alexua.messages.ui.slidingmenu.NavDrawerItem;
 import com.alexua.messages.ui.slidingmenu.NavDrawerListAdapter;
@@ -115,10 +118,10 @@ public class MainActivity extends FragmentActivity {
 //        fab.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
-//                MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentByTag(MapFragment.TAG);
+//                MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentByTag(MapFragment.FRAGMENT_TAG);
 //                if(mapFragment == null) {
 //                    mapFragment = new MapFragment();
-//                    getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mapFragment, MapFragment.TAG).commit();
+//                    getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mapFragment, MapFragment.FRAGMENT_TAG).commit();
 //                }
 //
 //
@@ -127,10 +130,15 @@ public class MainActivity extends FragmentActivity {
 //            }
 //        });
 
-        MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentByTag(MapFragment.TAG);
-        if(mapFragment == null) {
-            mapFragment = new MapFragment();
-            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mapFragment, MapFragment.TAG).commit();
+//        MapFragment fragment = (MapFragment) getSupportFragmentManager().findFragmentByTag(MapFragment.FRAGMENT_TAG);
+        ChatFragment fragment = (ChatFragment) getSupportFragmentManager().findFragmentByTag(ChatFragment.FRAGMENT_TAG);
+        if(fragment == null) {
+//            fragment = new MapFragment();
+            fragment = new ChatFragment();
+            Bundle args = new Bundle();
+            args.putString(ChatFragment.TO_USER_ID, SharedPrefHelper.getUserId(null));
+            fragment.setArguments(args);
+            getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment, ChatFragment.FRAGMENT_TAG).commit();
         }
 
         ServerAdapter.singinRequest("alexua89@gmail.com", "123123", new Response.Listener<ServerResponse>() {
@@ -155,10 +163,10 @@ public class MainActivity extends FragmentActivity {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
                                 long id) {
-            MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentByTag(MapFragment.TAG);
+            MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentByTag(MapFragment.FRAGMENT_TAG);
             if(mapFragment == null) {
                 mapFragment = new MapFragment();
-                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mapFragment, MapFragment.TAG).commit();
+                getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, mapFragment, MapFragment.FRAGMENT_TAG).commit();
             }
             // display view for selected nav drawer item
 //            displayView(position);
@@ -186,11 +194,12 @@ public class MainActivity extends FragmentActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentByTag(MapFragment.TAG);
-            if(mapFragment!=null){
-                getSupportFragmentManager().beginTransaction().remove(mapFragment).commit();
-            }
-            return true;
+            DBManager.saveDBonSDCard();
+//            MapFragment mapFragment = (MapFragment) getSupportFragmentManager().findFragmentByTag(MapFragment.FRAGMENT_TAG);
+//            if(mapFragment!=null){
+//                getSupportFragmentManager().beginTransaction().remove(mapFragment).commit();
+//            }
+//            return true;
         }
 
         return super.onOptionsItemSelected(item);

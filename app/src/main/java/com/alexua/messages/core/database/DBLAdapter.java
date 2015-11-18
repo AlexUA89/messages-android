@@ -161,6 +161,11 @@ public class DBLAdapter extends Database {
     }
 
     @Override
+    public DBStorable selectDBStorableByTypeAndId(int typeId, long dbstorableId) {
+        return dbAdapter.selectDBStorableByTypeAndId(typeId, dbstorableId);
+    }
+
+    @Override
     public DBStorable parseFromCursor(Cursor c, int typeId) {
         return dbAdapter.parseFromCursor(c, typeId);
     }

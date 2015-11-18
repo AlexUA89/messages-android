@@ -3,12 +3,12 @@ package com.alexua.messages.ui.fragments;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.alexua.messages.R;
-import com.alexua.messages.ui.base.BaseFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -21,11 +21,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 /**
  * Created by olkh on 11/13/2015.
  */
-public class MapFragment extends BaseFragment  implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener {
+public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMapClickListener, GoogleMap.OnMapLongClickListener {
 
     private Circle circle;
 
-    public static final String TAG = "FRAGMENT_MAP";
+    public static final String FRAGMENT_TAG = "FRAGMENT_MAP";
     private GoogleMap mMap;
 
     @Override

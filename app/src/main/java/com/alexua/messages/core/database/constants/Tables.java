@@ -43,6 +43,7 @@ public final class Tables {
         public static String USER_ID = "user_id";
         public static String USER_NAME = "user_name";
         public static String TIME = "time";
+        public static String SERVER_ID = "server_id";
     }
 
     public static final class GROUPS implements Table {

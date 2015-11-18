@@ -16,6 +16,7 @@ import com.alexua.messages.core.preferences.SharedPrefHelper;
 import com.alexua.messages.core.server.ServerAdapter;
 import com.alexua.messages.core.server.api.ServerResponse;
 import com.alexua.messages.ui.MainActivity;
+import com.alexua.messages.ui.base.BaseTextWatcher;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
@@ -32,6 +33,14 @@ public class LoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if(!SharedPrefHelper.getToken("").isEmpty() &&
+                !SharedPrefHelper.getEmail("").isEmpty() &&
+                !SharedPrefHelper.getUserId("").isEmpty() &&
+                !SharedPrefHelper.getUserName("").isEmpty()) {
+            startMainActivity();
+            return;
+        }
+
         setContentView(R.layout.login_activity);
         email = (TextView) findViewById(R.id.login_activity_email);
         pass = (TextView) findViewById(R.id.login_activity_password);
@@ -52,6 +61,7 @@ public class LoginActivity extends Activity {
                 String password = ((TextView) findViewById(R.id.login_activity_password)).getText().toString();
                 SharedPrefHelper.setEmail(email);
                 loading.setVisibility(View.VISIBLE);
+                setEnableAll(false);
                 ServerAdapter.singinRequest(email, password, loginListener, errorLoginListener);
             }
         });
@@ -59,15 +69,7 @@ public class LoginActivity extends Activity {
         setTitle("Please login to BLABLABLA");
     }
 
-    TextWatcher loginTextWatcher = new TextWatcher() {
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-        }
-
+    BaseTextWatcher loginTextWatcher = new BaseTextWatcher() {
         @Override
         public void afterTextChanged(Editable s) {
             login.setEnabled(!email.getText().toString().isEmpty() && !pass.getText().toString().isEmpty());
@@ -82,10 +84,10 @@ public class LoginActivity extends Activity {
                 SharedPrefHelper.setToken(token);
                 SharedPrefHelper.setEmail(email.getText().toString());
                 SharedPrefHelper.setUserName(response.getData().get("name"));
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-                finish();
+                SharedPrefHelper.setUserId(response.getData().get("user_id"));
+                startMainActivity();
             } else {
+                setEnableAll(true);
                 requestError(response.getData().get("errors"));
             }
         }
@@ -105,7 +107,20 @@ public class LoginActivity extends Activity {
         toast.setText(msg);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
+        setEnableAll(true);
         loading.setVisibility(View.GONE);
+    }
+
+    private void setEnableAll(boolean enable) {
+        login.setEnabled(enable && !email.getText().toString().isEmpty() && !pass.getText().toString().isEmpty());
+        email.setEnabled(enable);
+        pass.setEnabled(enable);
+    }
+
+    private void startMainActivity() {
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
 }

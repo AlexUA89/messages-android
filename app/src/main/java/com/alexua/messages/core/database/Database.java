@@ -35,6 +35,8 @@ public abstract class Database {
 
     public abstract Cursor selectAllDBStorablesByType(int typeId);
 
+    public abstract DBStorable selectDBStorableByTypeAndId(int typeId, long dbstorableId);
+
     public abstract DBStorable parseFromCursor(Cursor c, int typeId);
 
     public void addInsertListener(int typeID, DBInsertListener listener) {

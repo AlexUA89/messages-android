@@ -123,6 +123,18 @@ class DBAdapter extends Database {
         return c;
     }
 
+    @Override
+    public DBStorable selectDBStorableByTypeAndId(int typeId, long dbstorableId) {
+        Object[] tableInfo = getTableInfo(typeId);
+        DBStorable result = null;
+        Cursor c = null;
+        c = db.rawQuery("SELECT * FROM " + tableInfo[0] + " WHERE " + tableInfo[1] + " = " + dbstorableId + ";", null);
+        if (c.moveToFirst()) {
+            result = parseFromCursor(c, typeId);
+        }
+        return result;
+    }
+
 
     public DBStorable parseFromCursor(Cursor c, int typeId) {
         DBStorable result = null;
