@@ -26,4 +26,6 @@ dependencies {
     compile 'com.android.support:design:23.1.0'
     compile 'com.google.android.gms:play-services:8.3.0'
     compile 'com.mcxiaoke.volley:library:1.0.19'
+    compile 'javax.websocket:javax.websocket-api:1.1'
+    compile 'org.glassfish.tyrus:tyrus-container-grizzly-client:1.12'
 }

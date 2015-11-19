@@ -1,6 +1,4 @@
-package com.alexua.messages.core.server.api;
-
-import com.alexua.messages.core.database.datas.DBStorable;
+package com.alexua.messages.core.server.requestapi;
 
 import java.util.HashMap;
 import java.util.List;

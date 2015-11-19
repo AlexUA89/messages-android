@@ -16,8 +16,8 @@ import com.alexua.messages.R;
 import com.alexua.messages.core.AppLog;
 import com.alexua.messages.core.database.DBManager;
 import com.alexua.messages.core.preferences.SharedPrefHelper;
-import com.alexua.messages.core.server.ServerAdapter;
-import com.alexua.messages.core.server.api.ServerResponse;
+import com.alexua.messages.core.server.requestapi.ServerRequestAdapter;
+import com.alexua.messages.core.server.requestapi.ServerResponse;
 import com.alexua.messages.ui.fragments.ChatFragment;
 import com.alexua.messages.ui.fragments.MapFragment;
 import com.alexua.messages.ui.slidingmenu.NavDrawerItem;
@@ -141,7 +141,7 @@ public class MainActivity extends FragmentActivity {
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment, ChatFragment.FRAGMENT_TAG).commit();
         }
 
-        ServerAdapter.singinRequest("alexua89@gmail.com", "123123", new Response.Listener<ServerResponse>() {
+        ServerRequestAdapter.singinRequest("alexua89@gmail.com", "123123", new Response.Listener<ServerResponse>() {
             @Override
             public void onResponse(ServerResponse response) {
                 System.out.println(response);

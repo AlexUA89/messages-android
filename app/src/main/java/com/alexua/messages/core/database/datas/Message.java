@@ -23,7 +23,7 @@ public class Message extends DBStorable {
     private Double xcoord = null;
     private Double ycoord = null;
     private String toUserId = null;
-    private String chantGroupId = null;
+    private String chatGroupId = null;
     private String userId = null;
     private String userName = null;
     private String time = null;
@@ -59,7 +59,7 @@ public class Message extends DBStorable {
             this.ycoord = ycoord;
         }
         this.toUserId = toUserId;
-        this.chantGroupId = chantGroupId;
+        this.chatGroupId = chantGroupId;
 
         if (TextUtils.isEmpty(userId)) {
             throw new IllegalArgumentException("userId can not be: " + userId + ";");
@@ -81,7 +81,7 @@ public class Message extends DBStorable {
     }
 
     public Message(Message message) {
-        this(message.getRowID(), message.getMessage(), message.getXcoord(), message.getYcoord(), message.getToUserId(), message.getChantGroupId(), message.getUserId(), message.getUserName(), message.getTime(), message.getServerId());
+        this(message.getRowID(), message.getMessage(), message.getXcoord(), message.getYcoord(), message.getToUserId(), message.getChatGroupId(), message.getUserId(), message.getUserName(), message.getTime(), message.getServerId());
     }
 
     public Message(Parcel in) {
@@ -118,12 +118,31 @@ public class Message extends DBStorable {
         values.put(Tables.MESSAGES.XCOORD, xcoord);
         values.put(Tables.MESSAGES.YCOORD, ycoord);
         values.put(Tables.MESSAGES.TO_USER_ID, toUserId);
-        values.put(Tables.MESSAGES.CHAT_GROUP_ID, chantGroupId);
+        values.put(Tables.MESSAGES.CHAT_GROUP_ID, chatGroupId);
         values.put(Tables.MESSAGES.USER_ID, userId);
         values.put(Tables.MESSAGES.USER_NAME, userName);
         values.put(Tables.MESSAGES.TIME, time);
         values.put(Tables.MESSAGES.SERVER_ID, serverId);
         return values;
+    }
+
+    @Override
+    public String toJsonString() {
+        StringBuilder builder = new StringBuilder("{");
+        builder.append(" message: " + message);
+        if (xcoord != null && ycoord != null) {
+            builder.append(", xCoord: "+xcoord);
+            builder.append(", yCoord: "+ycoord);
+        }
+        if(toUserId!=null) {
+            builder.append(", toUserId: "+toUserId);
+        }
+        if(chatGroupId !=null) {
+            builder.append(", chatGroupId: "+ chatGroupId);
+        }
+        builder.append(", userId: "+ userId);
+        builder.append(", userName: "+ userName+"}");
+        return builder.toString();
     }
 
     @Override
@@ -143,7 +162,7 @@ public class Message extends DBStorable {
         dest.writeDouble(xcoord);
         dest.writeDouble(ycoord);
         dest.writeString(toUserId);
-        dest.writeString(chantGroupId);
+        dest.writeString(chatGroupId);
         dest.writeString(userId);
         dest.writeString(userName);
         dest.writeString(time);
@@ -176,8 +195,8 @@ public class Message extends DBStorable {
         return toUserId;
     }
 
-    public String getChantGroupId() {
-        return chantGroupId;
+    public String getChatGroupId() {
+        return chatGroupId;
     }
 
     public String getUserId() {
@@ -202,7 +221,7 @@ public class Message extends DBStorable {
             return false;
         }
         Message o1 = (Message) o;
-        if(serverId!=null && o1.getServerId()!=null && !serverId.equals(o1.getServerId())){
+        if (serverId != null && o1.getServerId() != null && !serverId.equals(o1.getServerId())) {
             return false;
         }
         if (!o1.getMessage().equalsIgnoreCase(message)) {
@@ -217,7 +236,7 @@ public class Message extends DBStorable {
         if (!o1.getToUserId().equalsIgnoreCase(toUserId)) {
             return false;
         }
-        if (!o1.getChantGroupId().equalsIgnoreCase(chantGroupId)) {
+        if (!o1.getChatGroupId().equalsIgnoreCase(chatGroupId)) {
             return false;
         }
         if (!o1.getUserId().equalsIgnoreCase(userId)) {

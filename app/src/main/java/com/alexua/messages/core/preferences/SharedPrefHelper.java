@@ -3,6 +3,7 @@ package com.alexua.messages.core.preferences;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.*;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 
 import com.alexua.messages.core.AppLog;
 import com.alexua.messages.core.ContextProvider;
@@ -60,6 +61,7 @@ public class SharedPrefHelper {
 
     public static void setToken(String token) {
         getEditor().putString(SPConstants.SESSION_TOKEN, token).commit();
+
     }
 
     public static String getToken(String defaultToken) {
@@ -72,6 +74,62 @@ public class SharedPrefHelper {
 
     public static String getUserId(String defaultUserName) {
         return getSHP().getString(SPConstants.USER_ID, defaultUserName);
+    }
+
+    public static void setXLocal(Double coord) {
+        if (coord != null) {
+            getEditor().putString(SPConstants.X_LOCAL, coord.toString());
+        }
+    }
+
+    public static Double getXLocal(Double defaultCoord) {
+        String strCoord = getSHP().getString(SPConstants.X_LOCAL, null);
+        if (TextUtils.isEmpty(strCoord)) {
+            return defaultCoord;
+        }
+        return Double.parseDouble(strCoord);
+    }
+
+    public static void setYLocal(Double coord) {
+        if (coord != null) {
+            getEditor().putString(SPConstants.Y_LOCAL, coord.toString());
+        }
+    }
+
+    public static Double getYLocal(Double defaultCoord) {
+        String strCoord = getSHP().getString(SPConstants.Y_LOCAL, null);
+        if (TextUtils.isEmpty(strCoord)) {
+            return defaultCoord;
+        }
+        return Double.parseDouble(strCoord);
+    }
+
+    public static void setXGlobal(Double coord) {
+        if (coord != null) {
+            getEditor().putString(SPConstants.X_GLOBAL, coord.toString());
+        }
+    }
+
+    public static Double getXGlobal(Double defaultCoord) {
+        String strCoord = getSHP().getString(SPConstants.X_GLOBAL, null);
+        if (TextUtils.isEmpty(strCoord)) {
+            return defaultCoord;
+        }
+        return Double.parseDouble(strCoord);
+    }
+
+    public static void setYGlobal(Double coord) {
+        if (coord != null) {
+            getEditor().putString(SPConstants.Y_GLOBAL, coord.toString());
+        }
+    }
+
+    public static Double getYGlobal(Double defaultCoord) {
+        String strCoord = getSHP().getString(SPConstants.Y_GLOBAL, null);
+        if (TextUtils.isEmpty(strCoord)) {
+            return defaultCoord;
+        }
+        return Double.parseDouble(strCoord);
     }
 
 }

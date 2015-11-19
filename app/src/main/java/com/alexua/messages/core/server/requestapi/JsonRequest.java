@@ -1,4 +1,4 @@
-package com.alexua.messages.core.server.api;
+package com.alexua.messages.core.server.requestapi;
 
 import com.alexua.messages.core.AppLog;
 import com.alexua.messages.core.ContextProvider;
@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * Created by AlexUA on 11/15/2015.
  */
-public final class JsonRequest extends Request<ServerResponse>{
+final class JsonRequest extends Request<ServerResponse>{
 
     public static final String TAG = JsonRequest.class.getCanonicalName();
     public static int GET = Method.GET;

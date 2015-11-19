@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -13,8 +12,8 @@ import android.widget.Toast;
 
 import com.alexua.messages.R;
 import com.alexua.messages.core.preferences.SharedPrefHelper;
-import com.alexua.messages.core.server.ServerAdapter;
-import com.alexua.messages.core.server.api.ServerResponse;
+import com.alexua.messages.core.server.requestapi.ServerRequestAdapter;
+import com.alexua.messages.core.server.requestapi.ServerResponse;
 import com.alexua.messages.ui.MainActivity;
 import com.alexua.messages.ui.base.BaseTextWatcher;
 import com.android.volley.Response;
@@ -62,7 +61,7 @@ public class LoginActivity extends Activity {
                 SharedPrefHelper.setEmail(email);
                 loading.setVisibility(View.VISIBLE);
                 setEnableAll(false);
-                ServerAdapter.singinRequest(email, password, loginListener, errorLoginListener);
+                ServerRequestAdapter.singinRequest(email, password, loginListener, errorLoginListener);
             }
         });
 

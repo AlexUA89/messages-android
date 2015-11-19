@@ -18,6 +18,8 @@ public abstract class DBStorable implements Parcelable, Cloneable {
 
     public abstract ContentValues getContentValues();
 
+    public abstract String toJsonString();
+
     @Override
     public abstract Object clone() throws CloneNotSupportedException;
 

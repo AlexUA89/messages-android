@@ -75,7 +75,6 @@ public class GeolocationService extends Service {
             //TODO send my geolocation
 
             sendEmptyMessageDelayed(0, 600 * 1000);
-
         }
     }
 

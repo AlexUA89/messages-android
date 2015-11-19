@@ -1,9 +1,6 @@
 package com.alexua.messages.ui.fragments;
 
-import android.content.Context;
-import android.database.Cursor;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -19,8 +16,8 @@ import com.alexua.messages.core.database.Database;
 import com.alexua.messages.core.database.constants.DBConstants;
 import com.alexua.messages.core.database.datas.Message;
 import com.alexua.messages.core.preferences.SharedPrefHelper;
-import com.alexua.messages.core.server.ServerAdapter;
-import com.alexua.messages.core.server.api.ServerResponse;
+import com.alexua.messages.core.server.requestapi.ServerRequestAdapter;
+import com.alexua.messages.core.server.requestapi.ServerResponse;
 import com.alexua.messages.ui.base.BaseTextWatcher;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -74,7 +71,7 @@ public class ChatFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Message message = new Message("hi " + System.currentTimeMillis(), xcoord, ycoord, toUserId, chatGroupId, SharedPrefHelper.getUserId(""), SharedPrefHelper.getUserName(""), "" + System.currentTimeMillis(), null);
-                ServerAdapter.sendMessage(message, sendMessageListener, errorSendMessageListener);
+                ServerRequestAdapter.sendMessage(message, sendMessageListener, errorSendMessageListener);
             }
         });
 

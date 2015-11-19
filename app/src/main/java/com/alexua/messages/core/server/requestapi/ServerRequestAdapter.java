@@ -1,10 +1,9 @@
-package com.alexua.messages.core.server;
+package com.alexua.messages.core.server.requestapi;
 
-import com.alexua.messages.core.database.datas.DBStorable;
 import com.alexua.messages.core.database.datas.Message;
 import com.alexua.messages.core.preferences.SharedPrefHelper;
-import com.alexua.messages.core.server.api.JsonRequest;
-import com.alexua.messages.core.server.api.ServerResponse;
+import com.alexua.messages.core.server.requestapi.JsonRequest;
+import com.alexua.messages.core.server.requestapi.ServerResponse;
 import com.android.volley.Response;
 
 import java.util.HashMap;
@@ -12,7 +11,7 @@ import java.util.HashMap;
 /**
  * Created by AlexUA on 11/15/2015.
  */
-public class ServerAdapter {
+public class ServerRequestAdapter {
 
     private static final String serverUrl = "http://31.220.107.60:3000";
 
@@ -30,8 +29,8 @@ public class ServerAdapter {
         if (message.getToUserId() != null) {
             params.put("toUserId", message.getToUserId());
         }
-        if (message.getChantGroupId() != null) {
-            params.put("chatGroupId", message.getChantGroupId());
+        if (message.getChatGroupId() != null) {
+            params.put("chatGroupId", message.getChatGroupId());
         }
         if (message.getXcoord() != null && message.getYcoord() != null) {
             params.put("xCoord", message.getXcoord().toString());
