@@ -1,7 +1,7 @@
 package com.alexua.messages.core.server.requestapi;
 
 import com.alexua.messages.core.AppLog;
-import com.alexua.messages.core.ContextProvider;
+import com.alexua.messages.ui.base.AlexApplication;
 import com.alexua.messages.core.utils.JsonUtils;
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
@@ -34,7 +34,7 @@ final class JsonRequest extends Request<ServerResponse>{
 
     private synchronized static RequestQueue getQueue() {
         if (queue == null) {
-            queue = Volley.newRequestQueue(ContextProvider.getAppContext());
+            queue = Volley.newRequestQueue(AlexApplication.getAppContext());
         }
         return queue;
     }

@@ -1,26 +1,28 @@
-package com.alexua.messages.core;
+package com.alexua.messages.ui.base;
 
 import android.app.Application;
 import android.content.Context;
+
+import com.alexua.messages.utils.LogUtils;
 
 /**
  * Created with IntelliJ IDEA.
  * User: Oleksii Khom
  * Date: 30.08.13
  * Time: 13:04
- * To change this template use File | Settings | File Templates.
  */
-public class ContextProvider extends Application {
+public class AlexApplication extends Application {
 
-    private static ContextProvider instance;
+    private static AlexApplication instance;
 
     @Override
     public void onCreate() {
+        LogUtils.log("application onCreate");
         super.onCreate();
         instance = this;
     }
 
-    synchronized public static ContextProvider getInstance() {
+    public static AlexApplication getInstance() {
         return instance;
     }
 

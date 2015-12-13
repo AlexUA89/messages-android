@@ -18,7 +18,7 @@ import com.alexua.messages.core.database.datas.Message;
 import com.alexua.messages.core.preferences.SharedPrefHelper;
 import com.alexua.messages.core.server.requestapi.ServerRequestAdapter;
 import com.alexua.messages.core.server.requestapi.ServerResponse;
-import com.alexua.messages.ui.base.BaseTextWatcher;
+import com.alexua.messages.utils.TextWatcherForLazy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
@@ -57,11 +57,10 @@ public class ChatFragment extends Fragment {
         xcoord = args.getDouble(XCOORD, Double.NaN);
         toUserId = args.getString(TO_USER_ID, null);
         chatGroupId = args.getString(CHAT_GROUP_ID, null);
-        if((xcoord.isNaN() || ycoord.isNaN()) && toUserId == null && chatGroupId == null) {
+        if ((xcoord.isNaN() || ycoord.isNaN()) && toUserId == null && chatGroupId == null) {
             throw new IllegalArgumentException("You didn't set parameters for fragment");
         }
     }
-
 
 
     private void initView(View fragmentView) {
@@ -75,7 +74,7 @@ public class ChatFragment extends Fragment {
             }
         });
 
-        msg.addTextChangedListener(new BaseTextWatcher() {
+        msg.addTextChangedListener(new TextWatcherForLazy() {
             @Override
             public void afterTextChanged(Editable s) {
                 send.setEnabled(!msg.getText().toString().isEmpty());
@@ -86,12 +85,12 @@ public class ChatFragment extends Fragment {
     com.android.volley.Response.Listener<ServerResponse> sendMessageListener = new Response.Listener<ServerResponse>() {
         @Override
         public void onResponse(ServerResponse response) {
-            Database db  = DBManager.getDatabase();
+            Database db = DBManager.getDatabase();
             long messageId = DBConstants.DEFAULT_ROW_ID;
-            if(db.open()){
+            if (db.open()) {
                 messageId = db.insertNewDBStorable(new Message(response.getData()));
             }
-            Message msg = (Message)db.selectDBStorableByTypeAndId(Message.TypeID, messageId);
+            Message msg = (Message) db.selectDBStorableByTypeAndId(Message.TypeID, messageId);
             db.close();
             System.out.println("Have sent");
         }

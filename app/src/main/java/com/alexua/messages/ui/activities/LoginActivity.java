@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
@@ -15,7 +16,7 @@ import com.alexua.messages.core.preferences.SharedPrefHelper;
 import com.alexua.messages.core.server.requestapi.ServerRequestAdapter;
 import com.alexua.messages.core.server.requestapi.ServerResponse;
 import com.alexua.messages.ui.MainActivity;
-import com.alexua.messages.ui.base.BaseTextWatcher;
+import com.alexua.messages.utils.TextWatcherForLazy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
@@ -32,7 +33,7 @@ public class LoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(!SharedPrefHelper.getToken("").isEmpty() &&
+        if (!SharedPrefHelper.getToken("").isEmpty() &&
                 !SharedPrefHelper.getEmail("").isEmpty() &&
                 !SharedPrefHelper.getUserId("").isEmpty() &&
                 !SharedPrefHelper.getUserName("").isEmpty()) {
@@ -68,7 +69,7 @@ public class LoginActivity extends Activity {
         setTitle("Please login to BLABLABLA");
     }
 
-    BaseTextWatcher loginTextWatcher = new BaseTextWatcher() {
+    TextWatcher loginTextWatcher = new TextWatcherForLazy() {
         @Override
         public void afterTextChanged(Editable s) {
             login.setEnabled(!email.getText().toString().isEmpty() && !pass.getText().toString().isEmpty());

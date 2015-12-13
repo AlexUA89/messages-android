@@ -1,17 +1,14 @@
 package com.alexua.messages.core.database;
 
 
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Environment;
 import android.widget.Toast;
 
-import com.alexua.messages.core.ContextProvider;
+import com.alexua.messages.ui.base.AlexApplication;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.nio.channels.FileChannel;
 
 /**
@@ -39,7 +36,7 @@ public class DBManager {
 
     synchronized public static Database getDatabase() {
         if (db == null) {
-            db = new DBLAdapter(new DBAdapter(new DatabaseHelper(ContextProvider.getAppContext())));
+            db = new DBLAdapter(new DBAdapter(new DatabaseHelper(AlexApplication.getAppContext())));
         }
         return db;
     }
@@ -50,7 +47,7 @@ public class DBManager {
             File data = Environment.getDataDirectory();
 
             if (sd.canWrite()) {
-                String currentDBPath = "//data//"+ContextProvider.getAppContext().getPackageName()+"//databases//"+DatabaseHelper.DATABASE_NAME+"";
+                String currentDBPath = "//data//"+ AlexApplication.getAppContext().getPackageName()+"//databases//"+DatabaseHelper.DATABASE_NAME+"";
                 String backupDBPath = "backupname.db";
                 File currentDB = new File(data, currentDBPath);
                 File backupDB = new File(sd, backupDBPath);
@@ -61,7 +58,7 @@ public class DBManager {
                     dst.transferFrom(src, 0, src.size());
                     src.close();
                     dst.close();
-                    Toast.makeText(ContextProvider.getAppContext(), backupDB.toString(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(AlexApplication.getAppContext(), backupDB.toString(), Toast.LENGTH_LONG).show();
                 }
             }
         } catch (Exception e) {

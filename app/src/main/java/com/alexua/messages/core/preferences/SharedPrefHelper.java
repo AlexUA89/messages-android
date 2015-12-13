@@ -6,7 +6,7 @@ import android.preference.PreferenceManager;
 import android.text.TextUtils;
 
 import com.alexua.messages.core.AppLog;
-import com.alexua.messages.core.ContextProvider;
+import com.alexua.messages.ui.base.AlexApplication;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,12 +22,12 @@ public class SharedPrefHelper {
     // -------------------------------------------------------BASIC FUNCTIONS------------------------------------------------------------
     private static SharedPreferences getSHP() {
         AppLog.D(TAG, "getSHP()");
-        return PreferenceManager.getDefaultSharedPreferences(ContextProvider.getAppContext());
+        return PreferenceManager.getDefaultSharedPreferences(AlexApplication.getAppContext());
     }
 
     private static Editor getEditor() {
         AppLog.D(TAG, "getEditor()");
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(ContextProvider.getAppContext());
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(AlexApplication.getAppContext());
         return sharedPreferences.edit();
     }
 

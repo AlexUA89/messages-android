@@ -7,7 +7,7 @@ import android.os.IBinder;
 import android.os.Message;
 
 import com.alexua.messages.core.AppLog;
-import com.alexua.messages.core.ContextProvider;
+import com.alexua.messages.ui.base.AlexApplication;
 import com.alexua.messages.core.preferences.SharedPrefHelper;
 
 /**
@@ -23,8 +23,8 @@ public class GeolocationService extends Service {
 
     public static void startService() {
         if (!SharedPrefHelper.getServiceState()) {
-            Intent i = new Intent(ContextProvider.getAppContext(), GeolocationService.class);
-            ContextProvider.getAppContext().startService(i);
+            Intent i = new Intent(AlexApplication.getAppContext(), GeolocationService.class);
+            AlexApplication.getAppContext().startService(i);
         }
     }
 
