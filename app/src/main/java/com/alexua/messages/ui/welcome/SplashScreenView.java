@@ -28,7 +28,7 @@ public class SplashScreenView extends FrameLayout {
     }
 
     public void show(final SplashListener showListener) {
-        EffectUtils.changeBackgroundColor(this, Color.TRANSPARENT, Color.argb(125, 0, 0, 0), 500);
+        EffectUtils.changeBackgroundColor(this, Color.TRANSPARENT, Color.argb(125, 0, 0, 0), 1000);
         Animation logoAlphaAnimation = new AlphaAnimation(0, 1);
         logoAlphaAnimation.setDuration(1000);
         logoAlphaAnimation.setStartOffset(250);
