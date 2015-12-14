@@ -2,7 +2,6 @@ package com.alexua.messages.ui.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +24,7 @@ import com.android.volley.VolleyError;
 /**
  * Created by AlexUA on 11/17/2015.
  */
-public class ChatFragment extends Fragment {
+public class ChatFragment extends BaseFragment {
 
     private static final String TAG = ChatFragment.class.getCanonicalName();
     public static final String FRAGMENT_TAG = "CHAT_FRAGMENT";
@@ -46,7 +45,7 @@ public class ChatFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View fragmentView = inflater.inflate(R.layout.chat_fragment, container, false);
+        View fragmentView = inflater.inflate(R.layout.fragment_chat, container, false);
         initView(fragmentView);
         initParameters(getArguments());
         return fragmentView;

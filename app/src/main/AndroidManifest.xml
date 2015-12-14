@@ -34,21 +34,23 @@
             android:value="@string/google_maps_key"/>
 
         <activity
-            android:name=".ui.MainActivity"
-            android:theme="@android:style/Theme.Holo.Light">
-            <!--<intent-filter>-->
-            <!--<action android:name="android.intent.action.MAIN" />-->
-            <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
-        </activity>
-
-        <activity
-            android:name=".ui.activities.LoginActivity"
-            android:theme="@android:style/Theme.Holo.Light.Dialog">
+            android:name=".ui.activities.WelcomeActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".ui.activities.LoginActivityOld">
+        </activity>
+
+        <activity
+            android:name=".ui.activities.MainActivity"
+            android:launchMode="singleTask"
+            android:theme="@android:style/Theme.Holo.Light"
+            >
         </activity>
 
         <!--Receivers-->

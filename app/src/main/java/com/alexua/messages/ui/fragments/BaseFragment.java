@@ -1,7 +1,7 @@
 package com.alexua.messages.ui.fragments;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 import com.alexua.messages.utils.LogUtils;
 import com.alexua.messages.utils.ScreenSwitchUtils;

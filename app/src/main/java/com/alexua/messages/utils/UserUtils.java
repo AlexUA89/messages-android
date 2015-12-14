@@ -5,7 +5,9 @@ package com.alexua.messages.utils;
  */
 public class UserUtils {
 
-    public static boolean isExistLoggedUser() {
+    //TODO just some stubs, logic will be decided and implemented later
+
+    public static boolean isLoggedUserExist() {
         return false;
     }
 

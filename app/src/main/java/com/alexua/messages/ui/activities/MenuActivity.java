@@ -1,4 +1,4 @@
-package com.alexua.messages.ui;
+package com.alexua.messages.ui.activities;
 
 import android.app.Activity;
 import android.content.res.Configuration;
@@ -44,7 +44,7 @@ public class MenuActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        setContentView(R.layout.menu_activity);
+        setContentView(R.layout.activity_menu);
 
         mTitle = mDrawerTitle = getTitle();
 
