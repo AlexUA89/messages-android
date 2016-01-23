@@ -1,4 +1,7 @@
 <resources>
+    <string name="server_url">http://31.220.107.60:3000</string>
+    <string name="socket_server_url">ws://31.220.107.60:3000</string>
+
     <string name="app_name">MessagesApplication</string>
     <string name="action_settings">Settings</string>
 

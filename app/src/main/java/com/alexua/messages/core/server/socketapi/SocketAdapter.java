@@ -1,25 +1,25 @@
 package com.alexua.messages.core.server.socketapi;
 
+import com.alexua.messages.R;
 import com.alexua.messages.core.AppLog;
+import com.alexua.messages.core.ContextProvider;
 import com.alexua.messages.core.preferences.SharedPrefHelper;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 
-/**
- * Created by AlexUA on 11/19/2015.
- */
 public class SocketAdapter {
 
     private static final String TAG = SocketAdapter.class.getCanonicalName();
     private static WebsocketClientEndpoint clientEndPoint;
+    private static String socketServerUrl = ContextProvider.getAppContext().getResources().getString(R.string.socket_server_url);
 
     private static boolean createConnection() {
         if (SharedPrefHelper.getToken(null) == null) {
             return false;
         }
         try {
-            clientEndPoint = new WebsocketClientEndpoint(new URI("ws://31.220.107.60:3000/?token=" + SharedPrefHelper.getToken("")));
+            clientEndPoint = new WebsocketClientEndpoint(new URI(socketServerUrl+ "/?token=" + SharedPrefHelper.getToken("")));
             clientEndPoint.addSocketListener(socketListener);
         } catch (URISyntaxException e) {
             AppLog.E(TAG, e);

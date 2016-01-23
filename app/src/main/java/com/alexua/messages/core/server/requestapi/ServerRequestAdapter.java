@@ -1,5 +1,7 @@
 package com.alexua.messages.core.server.requestapi;
 
+import com.alexua.messages.R;
+import com.alexua.messages.core.ContextProvider;
 import com.alexua.messages.core.database.datas.Message;
 import com.alexua.messages.core.preferences.SharedPrefHelper;
 import com.alexua.messages.core.server.requestapi.JsonRequest;
@@ -13,7 +15,7 @@ import java.util.HashMap;
  */
 public class ServerRequestAdapter {
 
-    private static final String serverUrl = "http://31.220.107.60:3000";
+    private static final String serverUrl = ContextProvider.getAppContext().getResources().getString(R.string.server_url);
 
     public static void singinRequest(String email, String password, Response.Listener<ServerResponse> listener, Response.ErrorListener errorListener) {
         HashMap<String, String> params = new HashMap<>();

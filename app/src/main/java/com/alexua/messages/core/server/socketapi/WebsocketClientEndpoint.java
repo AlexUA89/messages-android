@@ -1,19 +1,16 @@
 package com.alexua.messages.core.server.socketapi;
 
 import javax.websocket.*;
-import java.io.IOException;
-import java.net.URI;
 
-/**
- * ChatServer Client
- *
- * @author Jiji_Sasidharan
- */
-@ClientEndpoint
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class WebsocketClientEndpoint {
 
     Session userSession = null;
-    private SocketListener socketListener;
+    private List<SocketListener> socketListeners = new ArrayList<>();
 
     public WebsocketClientEndpoint(URI endpointURI) {
         try {
@@ -30,10 +27,12 @@ public class WebsocketClientEndpoint {
      * @param userSession the userSession which is opened.
      */
     @OnOpen
-    public void onOpen(Session userSession) {
+    private void onOpen(Session userSession) {
         this.userSession = userSession;
         this.userSession.setMaxIdleTimeout(0);
-        socketListener.handleOnOpen();
+        for(SocketListener handler : this.socketListeners) {
+            handler.handleOnOpen();
+        }
     }
 
     /**
@@ -43,9 +42,11 @@ public class WebsocketClientEndpoint {
      * @param reason the reason for connection close
      */
     @OnClose
-    public void onClose(Session userSession, CloseReason reason) {
+    private void onClose(Session userSession, CloseReason reason) {
         this.userSession = null;
-        socketListener.handleOnClose(reason.getReasonPhrase());
+        for(SocketListener handler : this.socketListeners) {
+            handler.handleOnClose(reason.getReasonPhrase());
+        }
     }
 
     /**
@@ -54,9 +55,11 @@ public class WebsocketClientEndpoint {
      * @param message The text message
      */
     @OnMessage
-    public void onMessage(String message) {
-        if (this.socketListener != null) {
-            this.socketListener.handleMessage(message);
+    private void onMessage(String message) {
+        if (this.socketListeners != null) {
+            for(SocketListener handler : this.socketListeners) {
+                handler.handleMessage(message);
+            }
         }
     }
 
@@ -66,7 +69,7 @@ public class WebsocketClientEndpoint {
      * @param message
      */
     public void addSocketListener(SocketListener msgHandler) {
-        this.socketListener = msgHandler;
+        this.socketListeners.add(msgHandler);
     }
 
     /**
@@ -84,17 +87,10 @@ public class WebsocketClientEndpoint {
      *
      * @author Jiji_Sasidharan
      */
-    public static interface SocketListener {
-        public void handleMessage(String message);
-        public void handleOnOpen();
-        public void handleOnClose(String message);
+    public interface SocketListener {
+        void handleMessage(String message);
+        void handleOnOpen();
+        void handleOnClose(String message);
     }
 
-    public void close() {
-        try {
-            userSession.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }
