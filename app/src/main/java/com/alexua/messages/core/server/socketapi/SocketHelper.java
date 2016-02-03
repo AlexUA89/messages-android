@@ -46,10 +46,13 @@ public class SocketHelper {
 
     public synchronized static void closeConnection() {
         if (clientEndPoint != null) {
-            executorService.submit(() -> {
-                clientEndPoint.close();
-                clientEndPoint = null;
-                AppLog.D(TAG, "Socket connection closed from android side");
+            executorService.submit(new Runnable() {
+                @Override
+                public void run() {
+                    clientEndPoint.close();
+                    clientEndPoint = null;
+                    AppLog.D(TAG, "Socket connection closed from android side");
+                }
             });
         } else {
             AppLog.D(TAG, "Socket connection already closed");
@@ -62,14 +65,16 @@ public class SocketHelper {
         listener = msgH;
         try {
             final String msg = ContextProvider.getObjectMapper().writeValueAsString(message);
-            executorService.submit(() -> {
-                if (checkConnection()) {
-                    clientEndPoint.sendMessage(msg);
-                    AppLog.D(TAG, "Message have sent: " + msg);
-                } else {
-                    AppLog.D(TAG, "Can not open connection");
+            executorService.submit(new Runnable() {
+                @Override
+                public void run() {
+                    if (checkConnection()) {
+                        clientEndPoint.sendMessage(msg);
+                        AppLog.D(TAG, "Message have sent: " + msg);
+                    } else {
+                        AppLog.D(TAG, "Can not open connection");
+                    }
                 }
-
             });
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);

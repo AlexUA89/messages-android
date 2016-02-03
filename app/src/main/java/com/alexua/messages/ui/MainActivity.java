@@ -141,7 +141,17 @@ public class MainActivity extends FragmentActivity {
             getSupportFragmentManager().beginTransaction().add(R.id.fragment_container, fragment, ChatFragment.FRAGMENT_TAG).commit();
         }
 
-        ServerRequestAdapter.singinRequest("alexua89@gmail.com", "123123", response -> System.out.println(response), error -> AppLog.D("DEVELOP", new String(error.networkResponse.data)));
+        ServerRequestAdapter.singinRequest("alexua89@gmail.com", "123123", new Response.Listener<ServerResponse>() {
+            @Override
+            public void onResponse(ServerResponse response) {
+                System.out.println(response);
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                AppLog.D("DEVELOP", new String(error.networkResponse.data));
+            }
+        });
 
     }
 
