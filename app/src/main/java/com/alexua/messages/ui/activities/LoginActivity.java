@@ -19,9 +19,7 @@ import com.alexua.messages.ui.base.BaseTextWatcher;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
-/**
- * Created by AlexUA on 11/17/2015.
- */
+
 public class LoginActivity extends Activity {
 
     TextView email = null;

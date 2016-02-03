@@ -10,9 +10,6 @@ import com.android.volley.Response;
 
 import java.util.HashMap;
 
-/**
- * Created by AlexUA on 11/15/2015.
- */
 public class ServerRequestAdapter {
 
     private static final String serverUrl = ContextProvider.getAppContext().getResources().getString(R.string.server_url);

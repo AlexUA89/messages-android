@@ -1,24 +1,30 @@
 package com.alexua.messages.core.server.socketapi;
 
-import javax.websocket.*;
-
+import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
+
+import javax.websocket.ClientEndpoint;
+import javax.websocket.CloseReason;
+import javax.websocket.ContainerProvider;
+import javax.websocket.DeploymentException;
+import javax.websocket.OnClose;
+import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
+import javax.websocket.WebSocketContainer;
 
 
-public class WebsocketClientEndpoint {
+@ClientEndpoint
+final class WebsocketClientEndpoint {
 
     Session userSession = null;
-    private List<SocketListener> socketListeners = new ArrayList<>();
+    SocketListener socketListener;
 
-    public WebsocketClientEndpoint(URI endpointURI) {
-        try {
-            WebSocketContainer container = ContainerProvider.getWebSocketContainer();
-            container.connectToServer(this, endpointURI);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+    public WebsocketClientEndpoint(URI endpointURI, SocketListener socketListener) throws IOException, DeploymentException {
+        this.socketListener = socketListener;
+        WebSocketContainer container = ContainerProvider.getWebSocketContainer();
+        container.connectToServer(this, endpointURI);
+
     }
 
     /**
@@ -27,26 +33,22 @@ public class WebsocketClientEndpoint {
      * @param userSession the userSession which is opened.
      */
     @OnOpen
-    private void onOpen(Session userSession) {
+    public void onOpen(Session userSession) {
         this.userSession = userSession;
         this.userSession.setMaxIdleTimeout(0);
-        for(SocketListener handler : this.socketListeners) {
-            handler.handleOnOpen();
-        }
+        socketListener.handleOnOpen();
     }
 
     /**
      * Callback hook for Connection close events.
      *
      * @param userSession the userSession which is getting closed.
-     * @param reason the reason for connection close
+     * @param reason      the reason for connection close
      */
     @OnClose
-    private void onClose(Session userSession, CloseReason reason) {
+    public void onClose(Session userSession, CloseReason reason) {
         this.userSession = null;
-        for(SocketListener handler : this.socketListeners) {
-            handler.handleOnClose(reason.getReasonPhrase());
-        }
+        socketListener.handleOnClose(reason.getReasonPhrase());
     }
 
     /**
@@ -55,21 +57,8 @@ public class WebsocketClientEndpoint {
      * @param message The text message
      */
     @OnMessage
-    private void onMessage(String message) {
-        if (this.socketListeners != null) {
-            for(SocketListener handler : this.socketListeners) {
-                handler.handleMessage(message);
-            }
-        }
-    }
-
-    /**
-     * register message handler
-     *
-     * @param message
-     */
-    public void addSocketListener(SocketListener msgHandler) {
-        this.socketListeners.add(msgHandler);
+    public void onMessage(String message) {
+        socketListener.handleMessage(message);
     }
 
     /**
@@ -87,10 +76,23 @@ public class WebsocketClientEndpoint {
      *
      * @author Jiji_Sasidharan
      */
-    public interface SocketListener {
-        void handleMessage(String message);
-        void handleOnOpen();
-        void handleOnClose(String message);
+    public static abstract class SocketListener {
+        public void handleMessage(String message) {
+        }
+
+        public void handleOnOpen() {
+        }
+
+        public void handleOnClose(String message) {
+        }
+    }
+
+    public void close() {
+        try {
+            userSession.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -3,9 +3,6 @@ package com.alexua.messages.core.server.requestapi;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by AlexUA on 11/15/2015.
- */
 public final class ServerResponse {
 
     private final int statusCode;

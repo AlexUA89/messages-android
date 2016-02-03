@@ -3,6 +3,8 @@ package com.alexua.messages.core;
 import android.app.Application;
 import android.content.Context;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
  * Created with IntelliJ IDEA.
  * User: Oleksii Khom
@@ -13,6 +15,8 @@ import android.content.Context;
 public class ContextProvider extends Application {
 
     private static ContextProvider instance;
+
+    private static ObjectMapper objectMapper;
 
     @Override
     public void onCreate() {
@@ -26,5 +30,12 @@ public class ContextProvider extends Application {
 
     synchronized public static Context getAppContext() {
         return getInstance().getApplicationContext();
+    }
+
+    synchronized public static ObjectMapper getObjectMapper(){
+        if(objectMapper == null){
+            objectMapper = new ObjectMapper();
+        }
+        return objectMapper;
     }
 }

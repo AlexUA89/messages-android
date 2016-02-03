@@ -11,9 +11,6 @@ import com.alexua.messages.core.database.constants.Tables;
 
 import java.util.HashMap;
 
-/**
- * Created by AlexUA on 11/15/2015.
- */
 public class Message extends DBStorable {
 
     public static final int TypeID = 1;

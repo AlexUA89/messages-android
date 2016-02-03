@@ -19,9 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by AlexUA on 11/15/2015.
- */
 final class JsonRequest extends Request<ServerResponse>{
 
     public static final String TAG = JsonRequest.class.getCanonicalName();

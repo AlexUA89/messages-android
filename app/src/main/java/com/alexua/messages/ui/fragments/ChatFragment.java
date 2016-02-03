@@ -7,24 +7,25 @@ import android.text.Editable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 
 import com.alexua.messages.R;
 import com.alexua.messages.core.database.DBManager;
 import com.alexua.messages.core.database.Database;
 import com.alexua.messages.core.database.constants.DBConstants;
 import com.alexua.messages.core.database.datas.Message;
-import com.alexua.messages.core.preferences.SharedPrefHelper;
-import com.alexua.messages.core.server.requestapi.ServerRequestAdapter;
+import com.alexua.messages.core.server.dto.MessageDto;
 import com.alexua.messages.core.server.requestapi.ServerResponse;
+import com.alexua.messages.core.server.socketapi.SocketHelper;
 import com.alexua.messages.ui.base.BaseTextWatcher;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 
-/**
- * Created by AlexUA on 11/17/2015.
- */
+import java.util.ArrayList;
+
 public class ChatFragment extends Fragment {
 
     private static final String TAG = ChatFragment.class.getCanonicalName();
@@ -41,6 +42,8 @@ public class ChatFragment extends Fragment {
     String chatGroupId = null;
 
     Button send = null;
+    ArrayList<String> messagesArray = new ArrayList<>();
+    ListView messagesList;
     EditText msg = null;
 
     @Nullable
@@ -66,12 +69,26 @@ public class ChatFragment extends Fragment {
 
     private void initView(View fragmentView) {
         msg = (EditText) fragmentView.findViewById(R.id.chat_fragment_msg);
+        messagesList = (ListView) fragmentView.findViewById(R.id.listView);
+        messagesList.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, messagesArray));
+        final Fragment fr = this;
+
         send = (Button) fragmentView.findViewById(R.id.chat_fragment_send);
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Message message = new Message("hi " + System.currentTimeMillis(), xcoord, ycoord, toUserId, chatGroupId, SharedPrefHelper.getUserId(""), SharedPrefHelper.getUserName(""), "" + System.currentTimeMillis(), null);
-                ServerRequestAdapter.sendMessage(message, sendMessageListener, errorSendMessageListener);
+                SocketHelper.sendMessage(new MessageDto(), new SocketHelper.MessageHandler() {
+                    @Override
+                    public void receiveMessage(final String message) {
+                        fr.getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                messagesArray.add(message);
+                                messagesList.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, messagesArray));
+                            }
+                        });
+                    }
+                });
             }
         });
 

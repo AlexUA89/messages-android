@@ -1,7 +1,5 @@
 package com.alexua.messages.core.utils;
 
-import com.alexua.messages.core.AppLog;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -11,9 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * Created by AlexUA on 11/15/2015.
- */
+
 public class JsonUtils {
 
     public static final String TAG = JsonUtils.class.getCanonicalName();
@@ -38,6 +34,10 @@ public class JsonUtils {
             result.add(getMapFromObject(actor));
         }
         return result;
+    }
+
+    public static JSONObject mapToObject(HashMap<String, String> map){
+        return new JSONObject(map);
     }
 
 }
