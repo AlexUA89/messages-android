@@ -35,6 +35,7 @@ public class ChatFragment extends Fragment {
     public static final String XCOORD = "xcoord";
     public static final String YCOORD = "ycoord";
     public static final String CHAT_GROUP_ID = "chatGroupId";
+    private static final String LIST_KEY = "LIST_KEY";
 
     Double xcoord = null;
     Double ycoord = null;
@@ -46,13 +47,21 @@ public class ChatFragment extends Fragment {
     ListView messagesList;
     EditText msg = null;
 
-    @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.chat_fragment, container, false);
+        if (savedInstanceState != null && savedInstanceState.getStringArrayList(LIST_KEY) != null) {
+            messagesArray = savedInstanceState.getStringArrayList(LIST_KEY);
+        }
         initView(fragmentView);
         initParameters(getArguments());
         return fragmentView;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putStringArrayList(LIST_KEY, messagesArray);
+        super.onSaveInstanceState(outState);
     }
 
     private void initParameters(Bundle args) {
@@ -60,11 +69,10 @@ public class ChatFragment extends Fragment {
         xcoord = args.getDouble(XCOORD, Double.NaN);
         toUserId = args.getString(TO_USER_ID, null);
         chatGroupId = args.getString(CHAT_GROUP_ID, null);
-        if((xcoord.isNaN() || ycoord.isNaN()) && toUserId == null && chatGroupId == null) {
+        if ((xcoord.isNaN() || ycoord.isNaN()) && toUserId == null && chatGroupId == null) {
             throw new IllegalArgumentException("You didn't set parameters for fragment");
         }
     }
-
 
 
     private void initView(View fragmentView) {
@@ -103,12 +111,12 @@ public class ChatFragment extends Fragment {
     com.android.volley.Response.Listener<ServerResponse> sendMessageListener = new Response.Listener<ServerResponse>() {
         @Override
         public void onResponse(ServerResponse response) {
-            Database db  = DBManager.getDatabase();
+            Database db = DBManager.getDatabase();
             long messageId = DBConstants.DEFAULT_ROW_ID;
-            if(db.open()){
+            if (db.open()) {
                 messageId = db.insertNewDBStorable(new Message(response.getData()));
             }
-            Message msg = (Message)db.selectDBStorableByTypeAndId(Message.TypeID, messageId);
+            Message msg = (Message) db.selectDBStorableByTypeAndId(Message.TypeID, messageId);
             db.close();
             System.out.println("Have sent");
         }

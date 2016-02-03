@@ -27,6 +27,7 @@ public class SocketHelper {
     private static WebsocketClientEndpoint clientEndPoint;
     private static String socketServerUrl = ContextProvider.getAppContext().getResources().getString(R.string.socket_server_url);
     private static ExecutorService executorService = Executors.newCachedThreadPool();
+    //TODO should be hashmap of listeners
     private static MessageHandler listener;
 
     public static boolean checkConnection() {
@@ -84,6 +85,7 @@ public class SocketHelper {
     private static WebsocketClientEndpoint.SocketListener socketListener = new WebsocketClientEndpoint.SocketListener() {
         @Override
         public void handleMessage(String message) {
+            //TODO should return DTO
             AppLog.D(TAG, "Received message");
             listener.receiveMessage(message);
         }
