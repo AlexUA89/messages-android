@@ -12,8 +12,8 @@ import android.widget.Toast;
 
 import com.alexua.messages.R;
 import com.alexua.messages.core.preferences.SharedPrefHelper;
+import com.alexua.messages.core.server.dto.LoginResponseDto;
 import com.alexua.messages.core.server.requestapi.ServerRequestAdapter;
-import com.alexua.messages.core.server.requestapi.ServerResponse;
 import com.alexua.messages.ui.MainActivity;
 import com.alexua.messages.ui.base.BaseTextWatcher;
 import com.android.volley.Response;
@@ -73,19 +73,19 @@ public class LoginActivity extends Activity {
         }
     };
 
-    Response.Listener<ServerResponse> loginListener = new Response.Listener<ServerResponse>() {
+    Response.Listener<LoginResponseDto> loginListener = new Response.Listener<LoginResponseDto>() {
         @Override
-        public void onResponse(ServerResponse response) {
-            String token = response.getData().get("token");
+        public void onResponse(LoginResponseDto response) {
+            String token = response.getData().getToken();
             if (token != null && !token.isEmpty()) {
                 SharedPrefHelper.setToken(token);
                 SharedPrefHelper.setEmail(email.getText().toString());
-                SharedPrefHelper.setUserName(response.getData().get("name"));
-                SharedPrefHelper.setUserId(response.getData().get("user_id"));
+                SharedPrefHelper.setUserName(response.getData().getName());
+                SharedPrefHelper.setUserId(response.getData().getUser_id());
                 startMainActivity();
             } else {
                 setEnableAll(true);
-                requestError(response.getData().get("errors"));
+                requestError(response.getErrors());
             }
         }
     };

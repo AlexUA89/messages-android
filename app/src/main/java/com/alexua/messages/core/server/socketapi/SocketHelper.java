@@ -16,7 +16,10 @@ import java.util.HashMap;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import javax.websocket.DeploymentException;
 import javax.websocket.MessageHandler;
@@ -26,7 +29,7 @@ public class SocketHelper {
     private static final String TAG = SocketHelper.class.getCanonicalName();
     private static WebsocketClientEndpoint clientEndPoint;
     private static String socketServerUrl = ContextProvider.getAppContext().getResources().getString(R.string.socket_server_url);
-    private static ExecutorService executorService = Executors.newCachedThreadPool();
+    private static ScheduledExecutorService executor = Executors.newScheduledThreadPool(2);
     //TODO should be hashmap of listeners
     private static MessageHandler listener;
 
@@ -47,7 +50,7 @@ public class SocketHelper {
 
     public synchronized static void closeConnection() {
         if (clientEndPoint != null) {
-            executorService.submit(new Runnable() {
+            executor.submit(new Runnable() {
                 @Override
                 public void run() {
                     clientEndPoint.close();
@@ -66,7 +69,7 @@ public class SocketHelper {
         listener = msgH;
         try {
             final String msg = ContextProvider.getObjectMapper().writeValueAsString(message);
-            executorService.submit(new Runnable() {
+            final Future handler = executor.submit(new Runnable() {
                 @Override
                 public void run() {
                     if (checkConnection()) {
@@ -77,6 +80,11 @@ public class SocketHelper {
                     }
                 }
             });
+            executor.schedule(new Runnable() {
+                public void run() {
+                    handler.cancel(true);
+                }
+            }, 10000, TimeUnit.MILLISECONDS);
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
@@ -98,7 +106,6 @@ public class SocketHelper {
         @Override
         public void handleOnClose(String message) {
             AppLog.D(TAG, "Socket connection closed");
-            clientEndPoint.close();
             clientEndPoint = null;
         }
     };

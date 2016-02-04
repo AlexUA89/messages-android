@@ -2,7 +2,7 @@ package com.alexua.messages.core.server.requestapi;
 
 import com.alexua.messages.core.AppLog;
 import com.alexua.messages.core.ContextProvider;
-import com.alexua.messages.core.utils.JsonUtils;
+import com.alexua.messages.core.server.dto.Dto;
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
@@ -11,23 +11,22 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.Volley;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import java.util.HashMap;
-import java.util.List;
+import java.io.IOException;
 import java.util.Map;
 
-final class JsonRequest extends Request<ServerResponse>{
+final class JsonRequest<ReqT extends Dto, ResT extends Dto> extends Request<ResT> {
 
     public static final String TAG = JsonRequest.class.getCanonicalName();
     public static int GET = Method.GET;
     public static int POST = Method.POST;
     private static RequestQueue queue;
+    private Class<ResT> klass;
 
     private Map<String, String> params = null;
-    private Response.Listener<ServerResponse> mListener = null;
+    private Response.Listener<ResT> mListener = null;
+    private ReqT body;
 
     private synchronized static RequestQueue getQueue() {
         if (queue == null) {
@@ -36,35 +35,26 @@ final class JsonRequest extends Request<ServerResponse>{
         return queue;
     }
 
-    public JsonRequest(int method, String url, Map<String, String> params, Response.Listener<ServerResponse> listener, Response.ErrorListener errorListener) {
+    public JsonRequest(int method, String url, Map<String, String> params, ReqT body, Class<ResT> klass, Response.Listener<ResT> listener, Response.ErrorListener errorListener) {
         super(method, packParametersToUrl(method, url, params), errorListener);
         this.params = params;
         this.mListener = listener;
+        this.body = body;
+        this.klass = klass;
     }
 
     @Override
-    protected Response<ServerResponse> parseNetworkResponse(NetworkResponse response) {
+    protected Response<ResT> parseNetworkResponse(NetworkResponse response) {
         int statusCode = response.statusCode;
-        JSONObject jObject;
-        boolean success;
-        List<HashMap<String,String>> errors = null;
-        HashMap<String, String> data = null;
-        List<HashMap<String, String>> dataList = null;
+        ResT resData = null;
         try {
-            jObject = new JSONObject(new String(response.data));
-            success = jObject.getBoolean("success");
-            errors = JsonUtils.getListOfObjects(jObject.optJSONArray("errors"));
-            Object jData = jObject.opt("data");
-            if (jData instanceof JSONObject) {
-               data = JsonUtils.getMapFromObject((JSONObject)jData);
-            } else if (jData instanceof JSONArray){
-                dataList = JsonUtils.getListOfObjects((JSONArray)jData);
-            }
-        } catch (JSONException e) {
-            AppLog.E(TAG, e);
-            return Response.error(new VolleyError(new String(response.data)));
+            resData = ContextProvider.getObjectMapper().readValue(new String(response.data), klass);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return Response.error(new VolleyError(new String(e.getMessage())));
         }
-        return Response.success(new ServerResponse(statusCode, success, errors, data, dataList), HttpHeaderParser.parseCacheHeaders(response));
+        resData.setStatusCode(statusCode);
+        return Response.success(resData, HttpHeaderParser.parseCacheHeaders(response));
     }
 
     @Override
@@ -74,7 +64,7 @@ final class JsonRequest extends Request<ServerResponse>{
     }
 
     @Override
-    protected void deliverResponse(ServerResponse response) {
+    protected void deliverResponse(ResT response) {
         if (mListener != null) {
             mListener.onResponse(response);
         }
@@ -85,12 +75,19 @@ final class JsonRequest extends Request<ServerResponse>{
     }
 
     @Override
-    protected Map<String, String> getParams() throws AuthFailureError {
-        return this.params;
+    public String getBodyContentType() {
+        return "application/json";
     }
 
-    public void setParams(Map<String, String> params) {
-        this.params = params;
+    @Override
+    public byte[] getBody() throws AuthFailureError {
+        try {
+            return ContextProvider.getObjectMapper().writeValueAsBytes(body);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            AppLog.E(TAG, e);
+        }
+        return new byte[0];
     }
 
     private static String packParametersToUrl(int method, String url, Map<String, String> params) {

@@ -18,7 +18,7 @@ import com.alexua.messages.core.database.Database;
 import com.alexua.messages.core.database.constants.DBConstants;
 import com.alexua.messages.core.database.datas.Message;
 import com.alexua.messages.core.server.dto.MessageDto;
-import com.alexua.messages.core.server.requestapi.ServerResponse;
+import com.alexua.messages.core.server.dto.SendingMessageResponseDto;
 import com.alexua.messages.core.server.socketapi.SocketHelper;
 import com.alexua.messages.ui.base.BaseTextWatcher;
 import com.android.volley.Response;
@@ -108,13 +108,14 @@ public class ChatFragment extends Fragment {
         });
     }
 
-    com.android.volley.Response.Listener<ServerResponse> sendMessageListener = new Response.Listener<ServerResponse>() {
+    com.android.volley.Response.Listener<SendingMessageResponseDto> sendMessageListener = new Response.Listener<SendingMessageResponseDto>() {
         @Override
-        public void onResponse(ServerResponse response) {
+        public void onResponse(SendingMessageResponseDto response) {
             Database db = DBManager.getDatabase();
             long messageId = DBConstants.DEFAULT_ROW_ID;
             if (db.open()) {
-                messageId = db.insertNewDBStorable(new Message(response.getData()));
+                //TODO change
+//                messageId = db.insertNewDBStorable(new Message(response.getData()));
             }
             Message msg = (Message) db.selectDBStorableByTypeAndId(Message.TypeID, messageId);
             db.close();

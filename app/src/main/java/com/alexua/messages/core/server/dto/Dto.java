@@ -1,14 +1,13 @@
 package com.alexua.messages.core.server.dto;
 
-import javax.validation.constraints.NotNull;
 
-public class Dto {
+public abstract class Dto {
 
-    @NotNull
     protected long code;
 
-    @NotNull
     protected String token;
+
+    private int statusCode;
 
     public long getCode() {
         return code;
@@ -26,4 +25,11 @@ public class Dto {
         this.token = token;
     }
 
+    public int getStatusCode() {
+        return statusCode;
+    }
+
+    public void setStatusCode(int statusCode) {
+        this.statusCode = statusCode;
+    }
 }
